@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/guest")
 public class GuestController {
 
-public void tt(){
-    System.out.println("ceshi");
-}
+    public void tt(){
+        System.out.println("ceshi");
+    }
 
     public void tteee(){
         System.out.println("ssss");
