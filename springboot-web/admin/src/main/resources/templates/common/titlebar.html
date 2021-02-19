@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="layui-header" th:fragment="headbar" id="headbar">
+    <ul class="layui-nav layui-bg-green">
+        <div class="layui-logo layui-nav-item" style="color: #FFFFFF">商务管理系统</div>
+    </ul>
+    <!--<div class="layui-logo layui-bg-green">商务管理系统</div>
+    &lt;!&ndash; 头部区域（可配合layui已有的水平导航） &ndash;&gt;
+    <ul class="layui-nav layui-bg-green layui-layout-left ">-->
+    <ul class="layui-nav layui-bg-green layui-layout-right">
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                <img src="http://t.cn/RCzsdCq" th:src="@{/images/img.png}" class="layui-nav-img">
+                [[${user.username}]]
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="#">基本资料</a></dd>
+                <dd><a href="#">安全设置</a></dd>
+                <dd><h2><a href="logout">
+                    退出</a></h2></dd>
+            </dl>
+        </li>
+
+    </ul>
+</div>
+
+</body>
+</html>

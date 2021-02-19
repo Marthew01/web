@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>userList</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" th:href="@{/layui/css/layui.css}" media="all">
+    <style>
+        body {
+            margin: 10px;
+        }
+
+        .demo-carousel {
+            height: 200px;
+            line-height: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="layui-card">
+    <div class="layui-card-header timo-card-header">
+        <span><i class="fa fa-bars"></i>用户管理</span>
+        <i class="layui-icon layui-icon-refresh refresh-btn"></i>
+    </div>
+    <div class="layui-card-body">
+        <div class="layui-row timo-card-screen">
+            <div class="pull-left layui-form-pane timo-search-box">
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" placeholder="用户名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户ID</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="id" placeholder="请输入用户ID"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn search-btn">
+                        查询
+                    </button>
+
+
+                </div>
+            </div>
+            <div class="timo-table-wrap">
+                <table class="layui-hide" id="demo" lay-filter="test"></table>
+                <script type="text/html" id="barDemo">
+                    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                </script>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script th:replace="common/layout :: script"></script>
+<script src="/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.config({
+        version: '1606406696816' //为了更新 js 缓存，可忽略
+    });
+
+    layui.use(['laypage', 'table','jquery'], function () {
+        var laypage = layui.laypage //分页
+            , table = layui.table //表格
+            , $ = layui.jquery;
+
+
+        var tableUrl = '/admin/userList';
+        //执行一个 table 实例
+        var tableBlock = table.render({
+            elem: '#demo'
+            , height: 600
+            , url: tableUrl //数据接口
+            , title: '用户表'
+            , method: 'get'
+            , page: true //开启分页
+            , toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            , totalRow: true //开启合计行
+            , cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: 'ID', width: 40, sort: true, fixed: 'left', totalRowText: '合计：'}
+                , {field: 'username', title: '用户名', width: 150}
+                , {field: 'experience', title: '积分', width: 90, sort: true, totalRow: true}
+                , {field: 'sex', title: '性别', width: 80, sort: true}
+                , {field: 'city', title: '城市', width: 80}
+                , {field: 'classify', title: '职业', width: 120}
+                , {field: 'createDate', title: '创建时间', width: 200,sort: true}
+                , {field: 'wealth', title: '财富', width: 120, sort: true, totalRow: true}
+                , {fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo'}
+            ]]
+            , parseData: function (res) { //res 即为原始返回的数据
+                console.log(res);
+                return {
+                    "code": res.code === 200 ? 0 : 1, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.totalElements, //解析数据长度
+                    "data": res.data.content //解析数据列表
+                };
+            }, request: {
+                pageName: 'page' //页码的参数名称，默认：page
+                , limitName: 'size' //每页数据量的参数名，默认：limit
+            }
+        });
+
+        $(document).on("click", '.search-btn', function () {
+            var searchData = {};
+            $('.timo-search-box [name]').each(function (key, val) {
+                if ($(val).val() !== undefined) {
+                    searchData[$(val).attr("name")] = $(val).val();
+                }
+            });
+
+            tableBlock.reload({
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where: searchData
+                , url: tableUrl //数据接口
+            });
+
+        });
+
+
+
+        //监听头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id)
+                , data = checkStatus.data; //获取选中的数据
+            switch (obj.event) {
+                case 'add':
+                    layer.msg('添加');
+                    break;
+                case 'update':
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else if (data.length > 1) {
+                        layer.msg('只能同时编辑一个');
+                    } else {
+                        layer.alert('编辑 [id]：' + checkStatus.data[0].id);
+                    }
+                    break;
+                case 'delete':
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else {
+                        layer.msg('删除');
+                    }
+                    break;
+            }
+            ;
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'detail') {
+                layer.msg('查看操作');
+            } else if (layEvent === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del(); //删除对应行（tr）的DOM结构
+                    layer.close(index);
+                    //向服务端发送删除指令
+                });
+            } else if (layEvent === 'edit') {
+                layer.msg('编辑操作');
+            }
+        });
+
+        //分页
+        laypage.render({
+            elem: 'pageDemo' //分页容器的id
+            , count: 100 //总页数
+            , skin: '#1E9FFF' //自定义选中色值
+            //,skip: true //开启跳页
+            , jump: function (obj, first) {
+                if (!first) {
+                    layer.msg('第' + obj.curr + '页', {offset: 'b'});
+
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

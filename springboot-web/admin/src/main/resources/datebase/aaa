@@ -1,0 +1,12 @@
+private long id;
+private String username;
+private String password;
+private String salt;
+private long experience;//积分
+private String sex;
+private String city;
+private String classify;//职业
+private long wealth;//财富
+@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+private Date createDate;//

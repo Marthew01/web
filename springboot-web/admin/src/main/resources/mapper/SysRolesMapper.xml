@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.dao.mapper.SysRolesMapper">
+
+    <select id="findRoleByUserAccount" parameterType="String" resultType="com.web.dao.model.entity.SysRole">
+        SELECT
+            role_tbl.id,
+            role_tbl.role
+        FROM
+            ( SELECT id FROM `user_t` WHERE account = #{account} ) AS user_tbl
+            LEFT JOIN
+            ( SELECT rid, uid FROM `user_role_t` ) AS user_role_tbl ON user_tbl.id = user_role_tbl.uid
+            LEFT JOIN
+            ( SELECT id, role FROM `role_t` ) AS role_tbl ON user_role_tbl.rid = role_tbl.id
+
+    </select>
+
+</mapper>

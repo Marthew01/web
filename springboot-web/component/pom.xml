@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>ttmm</artifactId>
+        <groupId>com.web</groupId>
+        <version>0.0.1</version>
+    </parent>
+
+    <artifactId>component</artifactId>
+    <version>0.0.1</version>
+    <packaging>pom</packaging>
+
+    <name>component</name>
+    <description>redis jwt..</description>
+
+    <modules>
+        <module>shiro-jwt</module>
+        <module>redis</module>
+    </modules>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.web</groupId>
+            <artifactId>service</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <!--shiro管理单点登录及权限-->
+        <!--<dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.4.0</version>
+        </dependency>-->
+        <!--shiro管理单点登录及权限-->
+    </dependencies>
+
+</project>

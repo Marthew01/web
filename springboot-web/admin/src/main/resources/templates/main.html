@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/layout :: htmlhead" th:with="title='主页'"></head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div th:replace="common/titlebar :: headbar">(head)</div>
+    <div th:replace="common/sidebar :: sidebar">(side)</div>
+
+    <div class="layui-body">
+        <!--内容主体区域-->
+        <iframe id="iframeMain" src="" style="width:100%; height:100%";></iframe>
+    </div>
+    <div th:replace="common/layout :: footer">(footer)</div>
+</div>
+<script th:replace="common/layout :: script"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("dd>a").click(function (e) {
+            //设置a的点击事件不跳转到另一个页面
+            e.preventDefault();
+            //给iframe添加src属性，值为a的href值
+            $("#iframeMain").attr("src",$(this).attr("href"));
+        });
+    });
+</script>
+</body>
+</html>

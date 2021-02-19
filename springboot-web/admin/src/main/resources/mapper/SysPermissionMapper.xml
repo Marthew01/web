@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.dao.mapper.SysPermissionMapper">
+
+    <select id="findPermissionByRoles" parameterType="com.web.dao.model.entity.SysRole" resultType="com.web.dao.model.entity.SysPermission">
+        SELECT
+            permission_tbl.id,
+            permission_tbl.name
+        FROM
+        ( SELECT pid FROM role_permission_t WHERE
+            rid = #{id}
+            <!--<if test="role != null and role != ''">
+                AND role = #{role}
+            </if>-->
+        ) AS role_permission_tbl
+        INNER JOIN
+        ( SELECT id,`name` FROM permission_t ) AS permission_tbl
+        ON role_permission_tbl.pid = permission_tbl.id
+    </select>
+
+</mapper>
